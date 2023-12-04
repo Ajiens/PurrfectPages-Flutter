@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:purrfect_pages/models/book.dart';
+import 'package:purrfect_pages/screens/deskripsi_buku.dart';
 import 'package:purrfect_pages/screens/navbar.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -36,67 +37,83 @@ class _BookPageState extends State<MyHomePage>{
     return list_product;
   }
   
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('Katalog Buku'),
-    ),
-    body: FutureBuilder<List<Book>>(
-      future: fetchProduct(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        } else {
-          // Tampilkan daftar buku dalam ListView
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              Book book = snapshot.data![index];
-              return Card(
-                elevation: 4, // Sesuaikan kebutuhan dengan elevasi yang diinginkan
-                margin: EdgeInsets.all(8), // Sesuaikan kebutuhan dengan margin yang diinginkan
-                child: GestureDetector(
-                  onTap: () { //TODO Tambahkan async -> Masuk ke Halaman Review
-                    // Tangani aksi ketika buku dipencet
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(SnackBar(
-                          content: Text("${book.fields.title} dengan ID: ${book.pk}!")));
-                  },
-                  child: ListTile(
-                    title: Text(book.fields.title),
-                    subtitle: Text(book.fields.author),
-                    leading: Image.network(
-                      book.fields.coverLink,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Katalog Buku'),
+      ),
+      body: FutureBuilder<List<Book>>(
+        future: fetchProduct(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            // Tampilkan daftar buku dalam ListView
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                Book book = snapshot.data![index];
+                return Card(
+                  elevation: 4, // Sesuaikan kebutuhan dengan elevasi yang diinginkan
+                  margin: EdgeInsets.all(8), // Sesuaikan kebutuhan dengan margin yang diinginkan
+                  child: GestureDetector(
+                    onTap: () { //TODO Tambahkan async -> Masuk ke Halaman Review
+                      // Tangani aksi ketika buku dipencet
+                      _pergiKeDeskripsiBuku(context, book.pk);
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(SnackBar(
+                            content: Text("${book.fields.title} dengan ID: ${book.pk}!")));
+                      
+                    },
+                    child: ListTile(
+                      title: Text(book.fields.title),
+                      subtitle: Text(book.fields.author),
+                      leading: Image.network(
+                        book.fields.coverLink,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                      ),
+                      
+                      // ... tambahkan widget lain sesuai kebutuhan untuk menampilkan informasi buku
                     ),
-                    
-                    // ... tambahkan widget lain sesuai kebutuhan untuk menampilkan informasi buku
-                  ),
-                ));
-            },
-          );
-        }
-      },
-    ),
-    bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+                  ));
+              },
+            );
+          }
         },
-    )
-  );
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTabSelected: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+      )
+    );
+  }
+  void _pergiKeDeskripsiBuku(BuildContext context, int idBuku) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DeskripsiBuku(idBuku: idBuku),
+        ));
+
+    // after the SecondScreen result comes back update the Text widget with it
+    setState(() {
+      idBuku = result;
+    });
+  }
 }
 
-}
