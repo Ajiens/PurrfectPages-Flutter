@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:purrfect_pages/screens/menu.dart';
+import 'package:purrfect_pages/screens/profile.dart';
+import 'package:purrfect_pages/screens/wishlist.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int) onTabSelected;
@@ -35,13 +38,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   void _navigateToPage(BuildContext context, int index) {
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => MyHomePage()));
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/wishlist');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const WishList()));
         break;
       case 2:
-        Navigator.pushReplacementNamed(context, '/profile');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const Profile()));
         break;
       // Tambahkan case sesuai dengan jumlah halaman yang Anda miliki
     }

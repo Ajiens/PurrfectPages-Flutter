@@ -14,9 +14,7 @@ class ReviewBuku extends StatefulWidget{
 }
 
 class _ReviewBukuState extends State<ReviewBuku> {
-    late Review review;
-
-    @override
+   @override
     void initState() {
       super.initState();
       fetchData();
@@ -25,19 +23,26 @@ class _ReviewBukuState extends State<ReviewBuku> {
     
     // path('deskripsi/<int:id>/review/', review_buku, name="rating_buku"),
 
-    Future<Review> fetchData() async {
-    var url = Uri.parse('http://localhost:8000/deskripsi_buku/get_review/');
+    Future<List<Review>> fetchData() async {
+    var url = Uri.parse('https://alwan.pythonanywhere.com/deskripsi_buku/get_review/');
     var response = await http.get(url, headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
       // Jika respons status code 200 OK
       dynamic responseData = jsonDecode(utf8.decode(response.bodyBytes));
 
-      // Periksa apakah responseData adalah List dan ambil elemen pertama
-      Map<String, dynamic> jsonData = responseData[0];
+      List<Review> list_review = [];
 
-      review = Review.fromJson(jsonData);
-      return review;
+      for (var data in responseData){
+        if (data != null){
+          Review kriteria = Review.fromJson(data);
+          //Filtering data
+          if (kriteria.bookId == widget.idBuku){
+            list_review.add(kriteria);
+          }
+        }
+      }
+      return list_review;
     } else {
       // Jika respons status code tidak 200 OK
       throw Exception('Failed to load book details');
@@ -48,31 +53,35 @@ class _ReviewBukuState extends State<ReviewBuku> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Review Buku')),
-      body: FutureBuilder<Review>(
+      body: FutureBuilder<List<Review>>(
         future: fetchData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (snapshot.hasError) {
+          }else if(snapshot.data!.length == 0){
+            return Center(
+              child: Text('Belum ada ulasan pembaca'),
+            );
+          }else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            review = snapshot.data!;
-
-            // Gunakan buku untuk menampilkan informasi buku
-            return Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Komentar: ${review.komentar}'),
-                  Text('Rating User: ${review.ratingUser}'),
-                  Text('Date Added: ${review.dateAdded}'),
-                ]
-              )
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index){
+                Review review = snapshot.data![index];
+                return Card(
+                  elevation: 4, // Sesuaikan kebutuhan dengan elevasi yang diinginkan
+                  margin: EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Text('User ID-${review.bookId}'),
+                    subtitle: Text(review.komentar),
+                  ),
+                );
+              },
             );
           }
         }
