@@ -241,13 +241,14 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                                                     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                                                     print("masuk sini");
                                                     final response = await request.postJson(
-                                                        "http://localhost:8000/deskripsi_buku/create-review-flutter/",
+                                                        "https://alwan.pythonanywhere.com/deskripsi_buku/create-review-flutter/",
                                                         jsonEncode(<String, String>{
                                                           'komentar': _komentar,
                                                           'rating': _rating.toString(),
                                                           'buku_id': buku.pk.toString(),
                                                           // TODO: Sesuaikan field data sesuai dengan aplikasimu
                                                         }));
+                                                    print(response['status']);
                                                     if (response['status'] == 'success') {
                                                       ScaffoldMessenger.of(context)
                                                           .showSnackBar(const SnackBar(
