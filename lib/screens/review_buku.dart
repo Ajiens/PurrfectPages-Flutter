@@ -76,16 +76,106 @@ class _ReviewBukuState extends State<ReviewBuku> {
                 return Card(
                   elevation: 4, // Sesuaikan kebutuhan dengan elevasi yang diinginkan
                   margin: EdgeInsets.all(8),
-                  child: ListTile(
-                    title: Text('User ID-${review.bookId}'),
-                    subtitle: Text(review.komentar),
-                  ),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("User ID-${review.userId}",
+                        style: const TextStyle(fontWeight: FontWeight.w400)
+                        ),
+                        RatingStars(review.ratingUser),
+                        DescriptionTextWidget(text: review.komentar)
+                      ]
+                    ),
+                  )
                 );
               },
             );
           }
         }
       )
+    );
+  }
+}
+
+class RatingStars extends StatelessWidget {
+  final int rating;
+
+  RatingStars(this.rating);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Icon> stars = List.generate(
+      5,
+      (index) => Icon(
+        index < rating ? Icons.star_rate_rounded : Icons.star_border_rounded,
+        color: index < rating ? Colors.amber : Colors.grey,
+        size: 20,
+      ),
+    );
+
+    return Row(
+      children: stars,
+    );
+  }
+}
+
+class DescriptionTextWidget extends StatefulWidget {
+  final String text;
+
+  DescriptionTextWidget({required this.text});
+
+  @override
+  _DescriptionTextWidgetState createState() => new _DescriptionTextWidgetState();
+}
+
+class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
+  late String firstHalf;
+  late String secondHalf;
+
+  bool flag = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.text.length > 50) {
+      firstHalf = widget.text.substring(0, 50);
+      secondHalf = widget.text.substring(50, widget.text.length);
+    } else {
+      firstHalf = widget.text;
+      secondHalf = "";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      child: secondHalf.isEmpty
+          ? new Text(firstHalf)
+          : new Column(
+              children: <Widget>[
+                new Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf)),
+                new InkWell(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      new Text(
+                        flag ? "show more" : "show less",
+                        style: new TextStyle(color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    setState(() {
+                      flag = !flag;
+                    });
+                  },
+                ),
+              ],
+            ),
     );
   }
 }
