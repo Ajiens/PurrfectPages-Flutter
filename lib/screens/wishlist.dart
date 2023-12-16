@@ -16,6 +16,8 @@ class _WishListState extends State<WishList>{
     return Scaffold(
     appBar: AppBar(
       title: Text('WishList User'),
+      backgroundColor: Colors.indigo,
+      foregroundColor: Colors.white,
     ),
     body: const Align(
       alignment: Alignment.center,

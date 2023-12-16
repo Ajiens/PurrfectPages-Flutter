@@ -16,6 +16,8 @@ class _ProfileState extends State<Profile>{
     return Scaffold(
     appBar: AppBar(
       title: Text('Profile User'),
+      backgroundColor: Colors.indigo,
+      foregroundColor: Colors.white,
     ),
     body: const Align(
       alignment: Alignment.center,
