@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:purrfect_pages/models/user.dart';
 import 'package:purrfect_pages/screens/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -78,6 +79,8 @@ class _LoginPageState extends State<LoginPage> {
                                 if (request.loggedIn) {
                                     String message = response['message'];
                                     String uname = response['username'];
+                                    UserLoggedIn.user = (User(username));
+
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context) => MyHomePage()),

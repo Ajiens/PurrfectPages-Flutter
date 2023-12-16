@@ -30,7 +30,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wish List'),
+        BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Book'),
         BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined), label: 'Profile'),
+       
+
       ],
     );
   }
