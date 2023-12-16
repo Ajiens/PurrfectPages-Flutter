@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +18,13 @@ class WishList extends StatefulWidget {
 
 class _WishListState extends State<WishList> {
   int _currentIndex = 1;
+  List<Wishlist> myWishlist = [];
 
   Future<List<Wishlist>> fetchData() async {
     final request = context.watch<CookieRequest>();
     final response = await request.get('http://127.0.0.1:8000/wishlist/get-books/');
 
-    List<Wishlist> myWishlist = [];
+    myWishlist.clear();
 
     for (var d in response) {
       if (d != null) {
@@ -30,6 +33,30 @@ class _WishListState extends State<WishList> {
     }
     return myWishlist;
   }
+
+
+   Future<void> deleteWishlist(int index) async {
+    final request = context.read<CookieRequest>();
+    final response = await request.postJson(
+      "http://127.0.0.1:8000/wishlist/remove/${myWishlist[index].pk}/",
+      jsonEncode({'buku_id': myWishlist[index].pk}),
+    ); 
+    if (response['success'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Buku berhasil dihapus")),
+      );
+      setState(() {
+        myWishlist.removeAt(index);
+      });
+    } else {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text("Gagal menghapus buku"),
+        ));
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -75,55 +102,65 @@ class _WishListState extends State<WishList> {
   }
 
   Widget wishlistListView(List<Wishlist> myWishlist) {
-  return ListView.builder(
-    itemCount: myWishlist.length,
-    itemBuilder: (context, index) {
-      return GestureDetector(
-        onTap: () {
-          _pergiKeDeskripsiBuku(context, myWishlist[index].pk);
-          ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(
-              content: Text("${myWishlist[index].title} dengan ID: ${myWishlist[index].pk}!")));
-        },
-        child: Card(
-          elevation: 5,
-          margin: EdgeInsets.all(8),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+    return ListView.builder(
+      itemCount: myWishlist.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            _pergiKeDeskripsiBuku(context, myWishlist[index].pk);
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                  content: Text(
+                      "${myWishlist[index].title} dengan ID: ${myWishlist[index].pk}!")));
+          },
+          child: Card(
+            elevation: 5,
+            margin: EdgeInsets.all(8),
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: ListTile(
+                leading: Container(
+                  child: Image.network(
+                  myWishlist[index].coverLink,
+                  fit: BoxFit.cover,
+                  )
+                ),
+                title: Text(
                   myWishlist[index].title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 8),
-                Text('Author: ${myWishlist[index].author}'),
-                Text('Price: ${myWishlist[index].harga}'),
-                Text('Keterangan: ${myWishlist[index].keterangan}'),
-              ],
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Author: ${myWishlist[index].author}'),
+                    Text('Price: ${myWishlist[index].harga}'),
+                    Text('Keterangan: ${myWishlist[index].keterangan}'),
+                  ],
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () async {
+                    await deleteWishlist(index);
+                  },
+                ),
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   void _pergiKeDeskripsiBuku(BuildContext context, int idBuku) async {
-
-    // start the SecondScreen and wait for it to finish with a result
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => DeskripsiBuku(idBuku: idBuku),
         ));
-
-    // after the SecondScreen result comes back update the Text widget with it
     setState(() {
       idBuku = result;
     });
