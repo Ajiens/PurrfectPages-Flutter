@@ -18,7 +18,7 @@ class _BookPageState extends State<MyHomePage>{
   Future<List<Book>> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'https://alwan.pythonanywhere.com/api/books/');
+        'http://127.0.0.1:8000/api/books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},

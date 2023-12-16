@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:purrfect_pages/screens/menu.dart';
 import 'package:purrfect_pages/screens/profile.dart';
-import 'package:purrfect_pages/screens/wishlist.dart';
+import 'package:purrfect_pages/screens/my_wishlist.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int) onTabSelected;
