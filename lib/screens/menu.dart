@@ -71,7 +71,6 @@ class _BookPageState extends State<MyHomePage>{
                         ..hideCurrentSnackBar()
                         ..showSnackBar(SnackBar(
                             content: Text("${book.fields.title} dengan ID: ${book.pk}!")));
-                      
                     },
                     child: ListTile(
                       title: Text(book.fields.title),

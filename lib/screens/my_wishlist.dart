@@ -1,10 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_pages/models/wishlist.dart';
 import 'package:purrfect_pages/screens/navbar.dart';
+import 'package:purrfect_pages/screens/deskripsi_buku.dart';
 
 class WishList extends StatefulWidget {
   const WishList({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class WishList extends StatefulWidget {
 
 class _WishListState extends State<WishList> {
   int _currentIndex = 1;
-  
+
   Future<List<Wishlist>> fetchData() async {
     final request = context.watch<CookieRequest>();
     final response = await request.get('http://127.0.0.1:8000/wishlist/get-books/');
@@ -55,10 +56,7 @@ class _WishListState extends State<WishList> {
             return Column(
               children: <Widget>[
                 Expanded(
-                  child: tableBody(
-                    context,
-                    myWishlist,
-                  ),
+                  child: wishlistListView(myWishlist),
                 ),
               ],
             );
@@ -72,66 +70,62 @@ class _WishListState extends State<WishList> {
             _currentIndex = index;
           });
         },
-    )
+      ),
     );
   }
 
-  SingleChildScrollView tableBody(BuildContext ctx, List<Wishlist> myWishlist) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          columns: [
-            DataColumn(
-              label: Text(
-                "Title",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+  Widget wishlistListView(List<Wishlist> myWishlist) {
+  return ListView.builder(
+    itemCount: myWishlist.length,
+    itemBuilder: (context, index) {
+      return GestureDetector(
+        onTap: () {
+          _pergiKeDeskripsiBuku(context, myWishlist[index].pk);
+          ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+              content: Text("${myWishlist[index].title} dengan ID: ${myWishlist[index].pk}!")));
+        },
+        child: Card(
+          elevation: 5,
+          margin: EdgeInsets.all(8),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  myWishlist[index].title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              numeric: false,
-            ),
-            DataColumn(
-              label: Text(
-                "Author",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              numeric: false,
-            ),
-            DataColumn(
-              label: Text(
-                "Price",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              numeric: true,
-            ),
-            DataColumn(
-              label: Text(
-                "Keterangan",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              numeric: false,
-            ),
-          ],
-          rows: myWishlist.map(
-            (myWishlist) => DataRow(
-              cells: [
-                DataCell(Text(myWishlist.title)),
-                DataCell(Text(myWishlist.author)),
-                DataCell(Text('${myWishlist.harga}')),
-                DataCell(Text(myWishlist.keterangan)),
+                SizedBox(height: 8),
+                Text('Author: ${myWishlist[index].author}'),
+                Text('Price: ${myWishlist[index].harga}'),
+                Text('Keterangan: ${myWishlist[index].keterangan}'),
               ],
             ),
-          ).toList(),
+          ),
         ),
-      ),
-    );
+      );
+    },
+  );
+}
+
+  void _pergiKeDeskripsiBuku(BuildContext context, int idBuku) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DeskripsiBuku(idBuku: idBuku),
+        ));
+
+    // after the SecondScreen result comes back update the Text widget with it
+    setState(() {
+      idBuku = result;
+    });
   }
 }
