@@ -15,30 +15,27 @@ class Pinjam_Buku extends StatefulWidget {
 
 class _Pinjam_BukuState extends State<Pinjam_Buku>{
   int _currentIndex = 1;
-
-  Future<List<Borrow>> fetchData(CookieRequest request) async {
-    final response = await request.postJson('http://localhost:8000/pinjam_buku/daftar_peminjaman/', 
-                                            jsonEncode(<String, String>{
-                                    'name':'bait',
-                                }));
-    
-    List<Borrow> list_borrow = [];
+     
+  Future<List<Borrow>> getFilteredPeminjaman() async {
+    final request = context.watch<CookieRequest>();
+    final response = await request.get("http://localhost:8000/pinjam_buku/get-books/");
+        
+    List<Borrow> daftar_peminjaman = [];
     for (var d in response){
       if (d != null){
-        list_borrow.add(Borrow.fromJson(d));
+        daftar_peminjaman.add( Borrow.fromJson(d));
       }
     }
-    return list_borrow;
-    
+    return daftar_peminjaman;
   }
 
+ 
  @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(title: Text('My Book')),
       body: FutureBuilder<List<Borrow>>(
-        future: fetchData(request),
+        future: getFilteredPeminjaman(),
         builder: (context,AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
                     return const Center(child: CircularProgressIndicator());
@@ -65,7 +62,7 @@ class _Pinjam_BukuState extends State<Pinjam_Buku>{
                     elevation: 4, // Sesuaikan kebutuhan dengan elevasi yang diinginkan
                     margin: EdgeInsets.all(8),
                     child: ListTile(
-                      subtitle: Text(pinjam.lamaPeminjaman as String),
+                      subtitle: Text(pinjam.title),
                     ),
                   );
                 },
@@ -75,6 +72,14 @@ class _Pinjam_BukuState extends State<Pinjam_Buku>{
           }
           
           
+        }
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTabSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
         }
       )
     );

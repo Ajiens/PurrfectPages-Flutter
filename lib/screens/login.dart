@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     @override
     Widget build(BuildContext context) {
         final request = context.watch<CookieRequest>();
+
         return Scaffold(
             appBar: AppBar(
                 title: const Text('Login'),
@@ -73,10 +74,11 @@ class _LoginPageState extends State<LoginPage> {
                                 'username': username,
                                 'password': password,
                                 });
-                    
+                              
                                 if (request.loggedIn) {
                                     String message = response['message'];
                                     String uname = response['username'];
+                                  
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context) => MyHomePage()),
