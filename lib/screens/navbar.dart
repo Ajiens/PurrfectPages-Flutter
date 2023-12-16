@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:purrfect_pages/screens/menu.dart';
-import 'package:purrfect_pages/screens/profile.dart';
+import 'package:purrfect_pages/screens/borrow.dart';
 import 'package:purrfect_pages/screens/my_wishlist.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -47,7 +47,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         break;
       case 2:
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const Profile()));
+            MaterialPageRoute(builder: (context) => const Pinjam_Buku()));
         break;
       // Tambahkan case sesuai dengan jumlah halaman yang Anda miliki
     }

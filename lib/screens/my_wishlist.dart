@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, deprecated_member_use
+// ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_pages/models/wishlist.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:purrfect_pages/screens/navbar.dart';
 
 class WishList extends StatefulWidget {
   const WishList({Key? key}) : super(key: key);
@@ -15,27 +14,26 @@ class WishList extends StatefulWidget {
 }
 
 class _WishListState extends State<WishList> {
+  int _currentIndex = 1;
+  
+  Future<List<Wishlist>> fetchData() async {
+    final request = context.watch<CookieRequest>();
+    final response = await request.get('http://127.0.0.1:8000/wishlist/get-books/');
 
-    Future<List<Wishlist>> fetchData() async {
-      final request = context.watch<CookieRequest>();
-      final response = await request.get('http://127.0.0.1:8000/wishlist/get-books/');
+    List<Wishlist> myWishlist = [];
 
-      List<Wishlist> myWishlist = [];
-
-      for (var d in response) {
-        if (d != null) {
-          myWishlist.add(Wishlist.fromJson(d));
-        }
+    for (var d in response) {
+      if (d != null) {
+        myWishlist.add(Wishlist.fromJson(d));
       }
-      return myWishlist;
     }
+    return myWishlist;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('My Wishlist'),
-      ),
+      appBar: AppBar(title: Text('My Wishlist')),
       body: FutureBuilder<List<Wishlist>>(
         future: fetchData(),
         builder: (context, snapshot) {
@@ -67,6 +65,14 @@ class _WishListState extends State<WishList> {
           }
         },
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTabSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+    )
     );
   }
 
@@ -76,8 +82,6 @@ class _WishListState extends State<WishList> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          dataRowHeight: 50,
-          dividerThickness: 5,
           columns: [
             DataColumn(
               label: Text(
@@ -117,12 +121,12 @@ class _WishListState extends State<WishList> {
             ),
           ],
           rows: myWishlist.map(
-            (my_wishlist) => DataRow(
+            (myWishlist) => DataRow(
               cells: [
-                DataCell(Text(my_wishlist.title)),
-                DataCell(Text(my_wishlist.author)),
-                DataCell(Text('${my_wishlist.harga}')),
-                DataCell(Text(my_wishlist.keterangan)),
+                DataCell(Text(myWishlist.title)),
+                DataCell(Text(myWishlist.author)),
+                DataCell(Text('${myWishlist.harga}')),
+                DataCell(Text(myWishlist.keterangan)),
               ],
             ),
           ).toList(),
