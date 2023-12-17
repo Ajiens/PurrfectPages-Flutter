@@ -199,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               if (_formKey.currentState!.validate()) {
                                 // Submit to Django server and wait for response
                                 final response = await request.postJson(
-                                  "http://127.0.0.1:8000/register",
+                                  "http://127.0.0.1:8000/auth/register_flutter/",
                                   // "http://127.0.0.1:8000/auth/register/",
                                   convert.jsonEncode(<String, String>{
                                     'username': username,
