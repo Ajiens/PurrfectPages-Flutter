@@ -50,25 +50,59 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             SizedBox(height: 16),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.pink[100], // Ganti sesuai warna yang diinginkan
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    "Username: ${widget.username}",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "Deskripsi: $description",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
-                  ),
-                ],
-              ),
+            Table(
+              columnWidths: {
+                0: FlexColumnWidth(2),
+                1: FlexColumnWidth(3),
+              },
+              children: [
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          "Username:",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          widget.username,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          "Deskripsi:",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          description,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             SizedBox(height: 16),
             ElevatedButton(
