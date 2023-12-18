@@ -37,7 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.1.1
   pbp_django_auth: ^0.4.0
+<<<<<<< HEAD
   shared_preferences: ^2.0.12
+=======
+  http: ^1.1.0
+>>>>>>> 4177c08897160cc64eb9a35085b8a2a0f78e4987
 
 dev_dependencies:
   flutter_test:

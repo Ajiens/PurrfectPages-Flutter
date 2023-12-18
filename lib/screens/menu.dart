@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:purrfect_pages/models/book.dart';
+import 'package:purrfect_pages/screens/deskripsi_buku.dart';
 import 'package:purrfect_pages/screens/navbar.dart';
 //nanti abis login bakal di direct kesini
 
@@ -16,7 +17,9 @@ class _BookPageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
   Future<List<Book>> fetchProduct() async {
-    var url = Uri.parse('http://localhost:8000/api/books/'); // ini nnti ganti jd alwan python anywhere
+    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+    var url = Uri.parse(
+        'http://127.0.0.1:8000/api/books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -30,14 +33,12 @@ class _BookPageState extends State<MyHomePage> {
     }
     return list_product;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Katalog Buku'),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
       ),
       body: FutureBuilder<List<Book>>(
         future: fetchProduct(),
@@ -78,10 +79,23 @@ class _BookPageState extends State<MyHomePage> {
             _currentIndex = index;
           });
         },
-    )
-  );
-}
+      ),
+    );
+  }
+  void _pergiKeDeskripsiBuku(BuildContext context, int idBuku) async {
 
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DeskripsiBuku(idBuku: idBuku),
+        ));
+
+    // after the SecondScreen result comes back update the Text widget with it
+    setState(() {
+      idBuku = result;
+    });
+  }
 }
 
 class BookCard extends StatelessWidget {

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 
 
@@ -31,7 +33,7 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
 
   Future<Book> fetchData() async {
 
-    var url = Uri.parse('https://alwan.pythonanywhere.com/api/books/${widget.idBuku}/');
+    var url = Uri.parse('http://127.0.0.1:8000/api/books/${widget.idBuku}/');
     var response = await http.get(url, headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
@@ -56,6 +58,8 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
     
   TextEditingController komentarController = TextEditingController();
   TextEditingController ratingController = TextEditingController();
+  TextEditingController keteranganController = TextEditingController();
+  TextEditingController lamaPeminjamanController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(title: Text('Deskripsi Buku')),
@@ -236,12 +240,9 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                                                     String _komentar = komentarController.text;
                                                     int _rating =  int.parse(ratingController.text);
 
-                                                    
                                                     // Kirim ke Django dan tunggu respons
-                                                    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                                                    
                                                     final response = await request.postJson(
-                                                        "https://alwan.pythonanywhere.com/deskripsi_buku/create-review-flutter/",
+                                                        "http://127.0.0.1:8000/deskripsi_buku/create-review-flutter/",
                                                         jsonEncode(<String, String>{
                                                           'komentar': _komentar,
                                                           'rating': _rating.toString(),
@@ -275,6 +276,196 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                       },
                       child: const Text('Add Review'),
                     ),
+                        ElevatedButton(
+                      onPressed: () async {
+                        await showDialog<void>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  content: Stack(
+                                    clipBehavior: Clip.none,
+                                    children: <Widget>[
+                                      Positioned(
+                                        right: -40,
+                                        top: -40,
+                                        child: InkResponse(
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const CircleAvatar(
+                                            backgroundColor: Colors.red,
+                                            child: Icon(Icons.close),
+                                          ),
+                                        ),
+                                      ),
+                                      Form(
+                                        key: _formKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: TextFormField(
+                                                controller: keteranganController,
+                                                decoration: InputDecoration(
+                                                hintText: "Keterangan",
+                                                labelText: "Keterangan",
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: ElevatedButton(
+                                                child: const Text('Submit'),
+                                                // Navigator.of(context).pop(); // Close the popup
+                                                onPressed: () async {
+                                                  if (_formKey.currentState!.validate()) {
+                                                    String _keterangan = keteranganController.text;
+
+                                                    // Kirim ke Django dan tunggu respons
+                                                    final response = await request.postJson(
+                                                    "http://127.0.0.1:8000/wishlist/add-flutter/${buku.pk}/",
+                                                    jsonEncode(<String, String>{
+                                                        'keterangan': _keterangan,
+                                                        'buku_id': buku.pk.toString(),
+                                                    }));
+                                                    if (response['status'] == 'success') {
+                                                      ScaffoldMessenger.of(context)
+                                                          .showSnackBar(const SnackBar(
+                                                        content: Text("Book added to your Wishlist"),
+                                                      ));
+                                                      Navigator.of(context).pop(); // Close the popup
+                                                    } else {
+                                                      ScaffoldMessenger.of(context)
+                                                          .showSnackBar(const SnackBar(
+                                                        content:
+                                                        Text("Book is already in your Wishlist"),
+                                                      ));
+                                                    }
+                                                    _formKey.currentState!.reset();
+                                                  }
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ));
+                      },
+                      child: const Text('Add to Wishlist'),),
+                      ElevatedButton(
+                      onPressed: () async {
+                        await showDialog<void>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content:Stack(
+                              clipBehavior:Clip.none,
+                              children: <Widget> [
+                                Positioned(
+                                  right: -40,
+                                  top: -40,
+                                  child: InkResponse(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Colors.red,
+                                      child: Icon(Icons.close),
+                                    ),
+                                  ),
+                                ),
+                                Form (
+                                  key: _formKey,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: TextFormField(
+                                          controller: lamaPeminjamanController,
+                                          decoration: InputDecoration(
+                                          hintText: "Lama Peminjaman",
+                                          labelText: "Lama Peminjaman",
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5.0)
+                                            ),
+                                          ),
+                                          validator: (String? value) {
+                                                  if (value == null || value.isEmpty) {
+                                                    return "Lama peminjaman tidak boleh kosong";
+                                                  }
+                                                  if (int.tryParse(value) == null || int.parse(value)<1) {
+                                                    return "Lama peminjman harus valid";
+                                                  }
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: ElevatedButton(
+                                          child: const Text('Pinjam'),
+                                          onPressed: () async{
+                                            if(_formKey.currentState!.validate()){
+                                              int _lamaPeminjaman = int.parse(lamaPeminjamanController.text); 
+                                              
+                                              
+                                              final response = await request.postJson(
+                                                "http://127.0.0.1:8000/pinjam_buku/pinjam_buku_flutter/${widget.idBuku}/",
+                                                      jsonEncode(<String, String>{
+                                                      'lama_peminjaman': _lamaPeminjaman.toString(),
+                                                      }));
+                                                
+                                              if (response['status'] == 'success') {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    title: Text("Sukses"),
+                                                    content: Text("Buku berhasil dipinjam!"),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: Text("OK"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              } else {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    title: Text("Gagal"),
+                                                    content: Text("Buku tidak tersedia."),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: Text("OK"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                            }}
+                                            lamaPeminjamanController.clear();
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ));
+                      }, child: const Text('Pinjam Buku'),
+                  )
                     ],
                   ),
                 ],

@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:purrfect_pages/models/user.dart';
 import 'package:purrfect_pages/screens/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -66,10 +69,9 @@ class _LoginPageState extends State<LoginPage> {
                                 String password = _passwordController.text;
 
                                 // Cek kredensial
-                                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                                 // gunakan URL http://10.0.2.2/
-                                final response = await request.login("https://alwan.pythonanywhere.com//auth/login/", {
+                                final response = await request.login("http://127.0.0.1:8000/auth/login/", {
                                 'username': username,
                                 'password': password,
                                 });
@@ -77,6 +79,8 @@ class _LoginPageState extends State<LoginPage> {
                                 if (request.loggedIn) {
                                     String message = response['message'];
                                     String uname = response['username'];
+                                    UserLoggedIn.user = (User(username));
+
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context) => MyHomePage()),

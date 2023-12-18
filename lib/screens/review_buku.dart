@@ -24,7 +24,7 @@ class _ReviewBukuState extends State<ReviewBuku> {
     // path('deskripsi/<int:id>/review/', review_buku, name="rating_buku"),
 
     Future<List<Review>> fetchData() async {
-    var url = Uri.parse('https://alwan.pythonanywhere.com/deskripsi_buku/get_review/');
+    var url = Uri.parse('http://127.0.0.1:8000/deskripsi_buku/get_review/');
     var response = await http.get(url, headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
