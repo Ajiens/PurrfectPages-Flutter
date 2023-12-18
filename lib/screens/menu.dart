@@ -95,7 +95,7 @@ Widget build(BuildContext context) {
           setState(() {
             _currentIndex = index;
           });
-        },
+        }, backgroundColor: Colors.pink, 
     )
   );
 }

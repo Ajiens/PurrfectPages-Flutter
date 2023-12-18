@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
       },
       child: MaterialApp(
         title: 'Purrfect Pages',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
           useMaterial3: true,
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/login': (context) => const LoginPage(),
           '/home': (context) => MyHomePage(),
-          '/profile': (context) => const Profile(),
+          '/profile': (context) => Profile(username: LoginPage.uname),
           '/wishlist': (context) => const WishList(),
         },
       ),

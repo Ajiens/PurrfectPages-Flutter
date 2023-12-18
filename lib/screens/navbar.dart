@@ -7,7 +7,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({
     Key? key,
     required this.onTabSelected,
-    required this.currentIndex,
+    required this.currentIndex, required MaterialColor backgroundColor,
   }) : super(key: key);
 
   @override
