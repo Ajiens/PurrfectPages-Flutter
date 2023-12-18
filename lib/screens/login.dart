@@ -70,8 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                 // Cek kredensial
                                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
-                                // gunakan URL http://10.0.2.2/
-                                final response = await request.login("http://127.0.0.1:8000/auth/login/", {
+                                final response = await request.login("https://alwan.pythonanywhere.com/auth/login/", {
                                 'username': username,
                                 'password': password,
                                 });

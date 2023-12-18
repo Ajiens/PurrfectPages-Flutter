@@ -1,10 +1,13 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_pages/models/wishlist.dart';
 import 'package:purrfect_pages/screens/navbar.dart';
+import 'package:purrfect_pages/screens/deskripsi_buku.dart';
 
 class WishList extends StatefulWidget {
   const WishList({Key? key}) : super(key: key);
@@ -15,12 +18,13 @@ class WishList extends StatefulWidget {
 
 class _WishListState extends State<WishList> {
   int _currentIndex = 1;
-  
+  List<Wishlist> myWishlist = [];
+
   Future<List<Wishlist>> fetchData() async {
     final request = context.watch<CookieRequest>();
-    final response = await request.get('http://127.0.0.1:8000/wishlist/get-books/');
+    final response = await request.get('https://alwan.pythonanywhere.com/wishlist/get-books/');
 
-    List<Wishlist> myWishlist = [];
+    myWishlist.clear();
 
     for (var d in response) {
       if (d != null) {
@@ -29,6 +33,30 @@ class _WishListState extends State<WishList> {
     }
     return myWishlist;
   }
+
+
+   Future<void> deleteWishlist(int index) async {
+    final request = context.read<CookieRequest>();
+    final response = await request.postJson(
+      "https://alwan.pythonanywhere.com/wishlist/remove/${myWishlist[index].pk}/",
+      jsonEncode({'buku_id': myWishlist[index].pk}),
+    ); 
+    if (response['success'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Buku berhasil dihapus")),
+      );
+      setState(() {
+        myWishlist.removeAt(index);
+      });
+    } else {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text("Gagal menghapus buku"),
+        ));
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +83,7 @@ class _WishListState extends State<WishList> {
             return Column(
               children: <Widget>[
                 Expanded(
-                  child: tableBody(
-                    context,
-                    myWishlist,
-                  ),
+                  child: wishlistListView(myWishlist),
                 ),
               ],
             );
@@ -71,68 +96,74 @@ class _WishListState extends State<WishList> {
           setState(() {
             _currentIndex = index;
           });
-        },
-    )
-    );
-  }
-
-  SingleChildScrollView tableBody(BuildContext ctx, List<Wishlist> myWishlist) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          columns: [
-            DataColumn(
-              label: Text(
-                "Title",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              numeric: false,
-            ),
-            DataColumn(
-              label: Text(
-                "Author",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              numeric: false,
-            ),
-            DataColumn(
-              label: Text(
-                "Price",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              numeric: true,
-            ),
-            DataColumn(
-              label: Text(
-                "Keterangan",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              numeric: false,
-            ),
-          ],
-          rows: myWishlist.map(
-            (myWishlist) => DataRow(
-              cells: [
-                DataCell(Text(myWishlist.title)),
-                DataCell(Text(myWishlist.author)),
-                DataCell(Text('${myWishlist.harga}')),
-                DataCell(Text(myWishlist.keterangan)),
-              ],
-            ),
-          ).toList(),
-        ),
+        }, backgroundColor: Colors.indigo,
       ),
       
     );
+  }
+
+  Widget wishlistListView(List<Wishlist> myWishlist) {
+    return ListView.builder(
+      itemCount: myWishlist.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            _pergiKeDeskripsiBuku(context, myWishlist[index].pk);
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                  content: Text(
+                      "${myWishlist[index].title} dengan ID: ${myWishlist[index].pk}!")));
+          },
+          child: Card(
+            elevation: 5,
+            margin: EdgeInsets.all(8),
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: ListTile(
+                leading: Container(
+                  child: Image.network(
+                  myWishlist[index].coverLink,
+                  fit: BoxFit.cover,
+                  )
+                ),
+                title: Text(
+                  myWishlist[index].title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Author: ${myWishlist[index].author}'),
+                    Text('Price: ${myWishlist[index].harga}'),
+                    Text('Keterangan: ${myWishlist[index].keterangan}'),
+                  ],
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () async {
+                    await deleteWishlist(index);
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _pergiKeDeskripsiBuku(BuildContext context, int idBuku) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DeskripsiBuku(idBuku: idBuku),
+        ));
+    setState(() {
+      idBuku = result;
+    });
   }
 }

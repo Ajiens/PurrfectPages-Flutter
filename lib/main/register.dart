@@ -33,8 +33,8 @@ class _RegisterPageState extends State<RegisterPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color.fromARGB(255, 255, 182, 193), // Pink Muda
-            Color.fromARGB(255, 255, 105, 180), // Pink Tua
+            Color.fromARGB(255, 63, 89, 238),
+            Color.fromARGB(255, 167, 179, 248),
           ],
         ),
       ),
@@ -235,14 +235,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: size.width * 0.8,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                            color: const Color(0xFFE91E63), // Warna Button
+                            color: Colors.indigo, // Warna Button
                           ),
                           child: TextButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 // Submit to Django server and wait for response
                                 final response = await request.postJson(
-                                  "http://127.0.0.1:8000/auth/register_flutter/",
+                                  "http://127.0.0.1:8000/auth_flutter/register_flutter/",
                                   // "http://127.0.0.1:8000/auth/register/",
                                   convert.jsonEncode(<String, String>{
                                     'username': username,

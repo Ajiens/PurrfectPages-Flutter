@@ -19,7 +19,7 @@ class _BookPageState extends State<MyHomePage> {
   Future<List<Book>> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'http://127.0.0.1:8000/api/books/');
+        'https://alwan.pythonanywhere.com/api/books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -63,7 +63,8 @@ class _BookPageState extends State<MyHomePage> {
                   title: book.fields.title,
                   author: book.fields.author,
                   imageUrl: book.fields.coverLink,
-                  rating: book.fields.averageRating,
+                  rating: book.fields.averageRating, 
+                  id: book.pk,
                 );
               },
             );
@@ -78,7 +79,7 @@ class _BookPageState extends State<MyHomePage> {
           setState(() {
             _currentIndex = index;
           });
-        },
+        }, backgroundColor: Colors.indigo,
       ),
     );
   }
@@ -103,12 +104,14 @@ class BookCard extends StatelessWidget {
   final String author;
   final String imageUrl;
   final double rating;
+  final int id;
 
   BookCard({
     required this.title,
     required this.author,
     required this.imageUrl,
     required this.rating,
+    required this.id,
   });
 
   @override
@@ -154,8 +157,17 @@ class BookCard extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () {
-                    // Implement click functionality
+                  onPressed: () { 
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DeskripsiBuku(idBuku: id),
+                      )
+                    );
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(SnackBar(
+                          content: Text("${title} dengan ID: ${id}!")));
                   },
                   child: Text('Lihat Deskripsi'),
                   style: ElevatedButton.styleFrom(

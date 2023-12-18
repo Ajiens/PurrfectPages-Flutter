@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profil User'),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.indigo,
         actions: [
           IconButton(
             icon: Icon(Icons.exit_to_app, color: Colors.white),
@@ -42,7 +42,7 @@ class _ProfileState extends State<Profile> {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundColor: Colors.pink,
+              backgroundColor: Colors.indigo,
               child: Icon(
                 Icons.person,
                 size: 60,
@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
                         padding: EdgeInsets.all(8),
                         child: Text(
                           "Username:",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo),
                         ),
                       ),
                     ),
@@ -87,7 +87,7 @@ class _ProfileState extends State<Profile> {
                         padding: EdgeInsets.all(8),
                         child: Text(
                           "Deskripsi:",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo),
                         ),
                       ),
                     ),
@@ -123,7 +123,7 @@ class _ProfileState extends State<Profile> {
           setState(() {
             _currentIndex = index;
           });
-        },
+        }, backgroundColor: Colors.indigo,
       ),
     );
   }

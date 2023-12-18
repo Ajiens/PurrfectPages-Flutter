@@ -15,8 +15,8 @@ class LoginApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
+       theme: ThemeData(
+        primarySwatch: Colors.indigo,
       ),
       home: const LoginPage(),
     );
@@ -48,8 +48,8 @@ class _LoginPageState extends State<LoginPage> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color.fromARGB(255, 255, 105, 180),
-                  Color.fromARGB(255, 255, 192, 203)
+                  Color.fromARGB(255, 63, 89, 238),
+                  Color.fromARGB(255, 167, 179, 248),
                 ])),
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
                 final response = await request.login(
-                    "http://127.0.0.1:8000/auth/login_flutter/", {
+                    "http://127.0.0.1:8000/auth_flutter/login_flutter/", {
                   //"http://localhost:8000/flutter_authentication/login_flutter/"
                       // "http://127.0.0.1:8000/auth/login/", {
 

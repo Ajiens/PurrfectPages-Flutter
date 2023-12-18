@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:purrfect_pages/main/login.dart';
 import 'package:purrfect_pages/models/borrow.dart';
 import 'package:purrfect_pages/models/user.dart';
 import 'package:purrfect_pages/screens/navbar.dart';
@@ -29,7 +30,7 @@ class _Pinjam_BukuState extends State<Pinjam_Buku> {
 
   Future<List<Borrow>> fetchData() async {
     final request = context.read<CookieRequest>();
-    final response = await request.get('http://127.0.0.1:8000/pinjam_buku/get-books/');
+    final response = await request.get('https://alwan.pythonanywhere.com/pinjam_buku/get-books/');
 
     List<Borrow> myBook = [];
 
@@ -44,7 +45,7 @@ class _Pinjam_BukuState extends State<Pinjam_Buku> {
   Future<void> returnBook(int index) async {
     final request = context.read<CookieRequest>();
     final response = await request.postJson(
-      "http://localhost:8000/pinjam_buku/kembalikan_flutter/${_books[index].pk}/${UserLoggedIn.user.username}",
+      "https://alwan.pythonanywhere.com/pinjam_buku/kembalikan_flutter/${_books[index].pk}/${LoginPage.uname}",
       jsonEncode({'name': _books[index].pk}),
     );
     if (response['status'] == 'success') {
@@ -116,7 +117,7 @@ class _Pinjam_BukuState extends State<Pinjam_Buku> {
           setState(() {
             _currentIndex = index;
           });
-        },
+        }, backgroundColor: Colors.indigo,
       ),
     );
   }

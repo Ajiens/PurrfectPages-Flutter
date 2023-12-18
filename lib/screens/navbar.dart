@@ -14,6 +14,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
     Key? key,
     required this.onTabSelected,
     required this.currentIndex,
+    required MaterialColor backgroundColor,
   }) : super(key: key);
 
   @override
@@ -34,10 +35,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wish List'),
         BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Book'),
+        BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Book'), // Change icon to 'add'
         BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined), label: 'Profile'),
-       
-
       ],
+      selectedItemColor: const Color.fromARGB(255, 56, 78, 202), // Change the color of the selected item here
+      unselectedItemColor: Colors.grey, // Change the color of the unselected item here
+
     );
   }
 
@@ -56,6 +59,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             MaterialPageRoute(builder: (context) => const Pinjam_Buku()));
         break;
       case 3:
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AddBookPage()));
+        break;
+      case 4:
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile(username:  LoginPage.uname,))); //TODO ini apa???
         break;
       // Tambahkan case sesuai dengan jumlah halaman yang Anda miliki

@@ -151,7 +151,7 @@ class _AddBookPageState extends State<AddBookPage> {
                         // Kirim ke Django dan tunggu respons
                         // Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                         final response = await request.postJson(
-                        "http://localhost:8000/katalog_buku/add-flutter/", // ini nnti ganti alwan.pythonanywhere hrsnya
+                        "https://alwan.pythonanywhere.com/katalog_buku/add-flutter/", // ini nnti ganti alwan.pythonanywhere hrsnya
                         jsonEncode(<String, String>{
                             'title': _title,
                             'cover link': _coverlink,
@@ -193,7 +193,7 @@ class _AddBookPageState extends State<AddBookPage> {
           setState(() {
             _currentIndex = index;
           });
-        },
+        }, backgroundColor: Colors.indigo,
     )
     // end
     );
