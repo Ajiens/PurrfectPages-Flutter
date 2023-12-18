@@ -21,7 +21,7 @@ class _WishListState extends State<WishList>{
     ),
     body: const Align(
       alignment: Alignment.center,
-      child: Text("WishList user"),
+      child: Text("WishList User"),
     ),
     bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,

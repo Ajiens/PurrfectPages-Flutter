@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:purrfect_pages/main/login.dart';
 import 'package:purrfect_pages/screens/addbook.dart';
 import 'package:purrfect_pages/screens/menu.dart';
 import 'package:purrfect_pages/screens/profile.dart';
@@ -11,7 +12,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({
     Key? key,
     required this.onTabSelected,
-    required this.currentIndex,
+    required this.currentIndex, 
   }) : super(key: key);
 
   @override
@@ -47,7 +48,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WishList()));
         break;
       case 2:
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Profile()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile(username:  LoginPage.uname,))); //TODO ini apa???
         break;
       case 3:
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AddBookPage()));

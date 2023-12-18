@@ -236,10 +236,10 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                                                     String _komentar = komentarController.text;
                                                     int _rating =  int.parse(ratingController.text);
 
-                                                    print(_rating);
+                                                    
                                                     // Kirim ke Django dan tunggu respons
                                                     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                                                    print("masuk sini");
+                                                    
                                                     final response = await request.postJson(
                                                         "https://alwan.pythonanywhere.com/deskripsi_buku/create-review-flutter/",
                                                         jsonEncode(<String, String>{

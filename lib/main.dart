@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:purrfect_pages/screens/menu.dart';
 import 'package:purrfect_pages/screens/profile.dart';
 import 'package:purrfect_pages/screens/wishlist.dart';
+<<<<<<< HEAD
 import 'package:purrfect_pages/screens/addbook.dart'; //Ini buat akses MyHomePage()
 
 import 'dart:convert';
@@ -27,13 +28,20 @@ import 'package:http/http.dart' as http;
 
 void main() => runApp(const MyApp());
 
+=======
+import 'package:purrfect_pages/main/login.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+>>>>>>> 707aae5e8a52c1c2035cf6dd6eb736cebace4fc2
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     CookieRequest request = CookieRequest();
     return Provider(
       create: (_) {
@@ -62,9 +70,34 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(),
     )
+=======
+    return Provider(
+      create: (_) {
+        CookieRequest request = CookieRequest();
+        return request;
+      },
+      child: MaterialApp(
+        title: 'Purrfect Pages',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
+          useMaterial3: true,
+        ),
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => MyHomePage(),
+          '/profile': (context) => Profile(username: LoginPage.uname),
+          '/wishlist': (context) => const WishList(),
+        },
+      ),
+>>>>>>> 707aae5e8a52c1c2035cf6dd6eb736cebace4fc2
     );
 
   }
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 707aae5e8a52c1c2035cf6dd6eb736cebace4fc2
