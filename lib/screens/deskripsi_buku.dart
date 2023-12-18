@@ -331,10 +331,14 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                             
                           ),
                           SizedBox(width: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width - 164,
+                            child: 
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                             foregroundColor: Color.fromARGB(255, 241, 245, 255), backgroundColor: Color.fromARGB(255, 134, 134, 255),
                             padding: EdgeInsets.fromLTRB(30, 17, 80, 17),
+                            
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(7)),
                               ),
@@ -353,6 +357,7 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                               ],
                             )
                         ),
+                          ),
                       ],
                     ),
                   ),
