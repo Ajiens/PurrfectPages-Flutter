@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-//import 'package:purrfect_pages/screens/menu.dart';
-//import 'package:purrfect_pages/screens/profile.dart';
-//import 'package:purrfect_pages/screens/wishlist.dart'; //Ini buat akses MyHomePage()
+import 'package:purrfect_pages/screens/menu.dart';
+import 'package:purrfect_pages/screens/profile.dart';
+import 'package:purrfect_pages/screens/wishlist.dart';
 import 'package:purrfect_pages/main/login.dart';
 
 void main() {
@@ -21,12 +21,19 @@ class MyApp extends StatelessWidget {
         return request;
       },
       child: MaterialApp(
-          title: 'Purrfect Pages',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
-            useMaterial3: true,
-          ),
-          home: const LoginPage()),
+        title: 'Purrfect Pages',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
+          useMaterial3: true,
+        ),
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => MyHomePage(),
+          '/profile': (context) => const Profile(),
+          '/wishlist': (context) => const WishList(),
+        },
+      ),
     );
   }
 }
