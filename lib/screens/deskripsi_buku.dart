@@ -5,6 +5,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:purrfect_pages/main/login.dart';
 import 'dart:convert';
 
 import 'package:purrfect_pages/models/book.dart';
@@ -285,6 +286,7 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                                                             'komentar': _komentar,
                                                             'rating': _rating.toString(),
                                                             'buku_id': buku.pk.toString(),
+                                                            'username':  LoginPage.uname
                                                             // TODO: Sesuaikan field data sesuai dengan aplikasimu
                                                           }));
                                                       print(response['status']);
@@ -380,6 +382,7 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                                                     jsonEncode(<String, String>{
                                                         'keterangan': _keterangan,
                                                         'buku_id': buku.pk.toString(),
+                                                        'username':  LoginPage.uname
                                                     }));
                                                     if (response['status'] == 'success') {
                                                       showDialog(
@@ -504,6 +507,7 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
                                                       "https://alwan.pythonanywhere.com/pinjam_buku/pinjam_buku_flutter/${widget.idBuku}/",
                                                             jsonEncode(<String, String>{
                                                             'lama_peminjaman': _lamaPeminjaman.toString(),
+                                                            'username':  LoginPage.uname
                                                             }));
                                                       
                                                     if (response['status'] == 'success') {
