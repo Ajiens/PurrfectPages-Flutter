@@ -61,7 +61,13 @@ class _Pinjam_BukuState extends State<Pinjam_Buku> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('My Book')),
+      appBar: AppBar(
+        title: Text('My Book'),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+      ),
+      
       body: FutureBuilder<List<Borrow>>(
         future: fetchData(),
         builder: (context, AsyncSnapshot<List<Borrow>> snapshot) {
@@ -72,8 +78,8 @@ class _Pinjam_BukuState extends State<Pinjam_Buku> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text('Tidak ada data produk.', style: TextStyle(color: Color(0xff59A5D8), fontSize: 20)),
+            return Center(
+              child: Text('No data available'),
             );
           } else {
             return ListView.builder(
@@ -102,7 +108,28 @@ class _Pinjam_BukuState extends State<Pinjam_Buku> {
                       onPressed: () async {
                         await returnBook(index);
                       },
-                      child: Text('Kembalikan Buku'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.indigo, // Mengatur warna latar belakang tombol
+                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Mengatur padding tombol
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.bookmark, // Ganti dengan ikon yang diinginkan
+                            size: 16, // Atur ukuran ikon
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 4), // Beri jarak antara ikon dan teks
+                          Text(
+                            'Kembalikan Buku',
+                            style: TextStyle(
+                              fontSize: 12, // Mengatur ukuran teks tombol
+                              color: Colors.white, // Warna teks
+                            ),      
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

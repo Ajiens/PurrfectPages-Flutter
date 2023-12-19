@@ -61,7 +61,13 @@ class _WishListState extends State<WishList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('My Wishlist')),
+      appBar: AppBar(
+        title: Text('My Wishlist'),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+
+      ),
       body: FutureBuilder<List<Wishlist>>(
         future: fetchData(),
         builder: (context, snapshot) {

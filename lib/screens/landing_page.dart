@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:purrfect_pages/main/login.dart';
 import 'dart:convert';
 import 'package:purrfect_pages/models/book.dart';
 import 'package:purrfect_pages/screens/deskripsi_buku.dart';
+import 'package:purrfect_pages/screens/deskripsi_buku_landing_page.dart';
 import 'package:purrfect_pages/screens/navbar.dart';
-//nanti abis login bakal di direct kesini
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class LandingPage extends StatefulWidget {
+  LandingPage({Key? key}) : super(key: key);
 
   @override
-  _BookPageState createState() => _BookPageState();
+  _BookPageLanding createState() => _BookPageLanding();
 }
 
-class _BookPageState extends State<MyHomePage> {
-  int _currentIndex = 0;
+class _BookPageLanding extends State<LandingPage> {
 
   Future<List<Book>> fetchProduct() async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse(
-        'https://alwan.pythonanywhere.com/api/books/');
+    var url = Uri.parse('https://alwan.pythonanywhere.com/api/books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -33,7 +31,7 @@ class _BookPageState extends State<MyHomePage> {
     }
     return list_product;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,8 +39,19 @@ class _BookPageState extends State<MyHomePage> {
         title: Text('Katalog Buku'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.login),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+          ),
+        ],
       ),
+    
       body: FutureBuilder<List<Book>>(
         future: fetchProduct(),
         builder: (context, snapshot) {
@@ -52,11 +61,11 @@ class _BookPageState extends State<MyHomePage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             return GridView.builder(
-              padding: EdgeInsets.all(16), // Increased padding around the GridView
+              padding: EdgeInsets.all(16),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16, // Increased spacing between items
-                mainAxisSpacing: 16, // Increased row spacing
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
                 childAspectRatio: 0.6,
               ),
               itemCount: snapshot.data!.length,
@@ -66,7 +75,7 @@ class _BookPageState extends State<MyHomePage> {
                   title: book.fields.title,
                   author: book.fields.author,
                   imageUrl: book.fields.coverLink,
-                  rating: book.fields.averageRating, 
+                  rating: book.fields.averageRating,
                   id: book.pk,
                 );
               },
@@ -76,26 +85,17 @@ class _BookPageState extends State<MyHomePage> {
           }
         },
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTabSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        }, backgroundColor: Colors.indigo,
-      ),
     );
   }
+
   void _pergiKeDeskripsiBuku(BuildContext context, int idBuku) async {
-
-    // start the SecondScreen and wait for it to finish with a result
     final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DeskripsiBuku(idBuku: idBuku),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => DeskripsiBukuLandingPage(idBuku: idBuku),
+      ),
+    );
 
-    // after the SecondScreen result comes back update the Text widget with it
     setState(() {
       idBuku = result;
     });
@@ -119,12 +119,11 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Slightly modify the BookCard for a better fit in a grid
     return Card(
       elevation: 4,
-      clipBehavior: Clip.antiAlias, // Added for better styling
+      clipBehavior: Clip.antiAlias,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch items
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
             child: Image.network(
@@ -140,7 +139,7 @@ class BookCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  maxLines: 1, // Ensure the title does not wrap
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 4),
@@ -155,27 +154,32 @@ class BookCard extends StatelessWidget {
                   children: <Widget>[
                     Icon(Icons.star, color: Colors.amber, size: 20),
                     SizedBox(width: 4),
-                    Text(rating.toString(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text(
+                      rating.toString(),
+                      style: TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () { 
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DeskripsiBuku(idBuku: id),
-                      )
+                        builder: (context) => DeskripsiBukuLandingPage(idBuku: id),
+                      ),
                     );
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(SnackBar(
-                          content: Text("${title} dengan ID: ${id}!")));
+                        content: Text("${title} dengan ID: ${id}!"),
+                      ));
                   },
                   child: Text('Lihat Deskripsi'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.indigo, // Button color
-                    onPrimary: Colors.white, // Text color
+                    primary: Colors.indigo,
+                    onPrimary: Colors.white,
                   ),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:purrfect_pages/screens/landing_page.dart';
 import '../main/login.dart';
 import 'navbar.dart';
 
@@ -21,12 +22,14 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         title: Text('Profil User'),
         backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: Icon(Icons.exit_to_app, color: Colors.white),
             onPressed: () {
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => LoginPage()),
+                MaterialPageRoute(builder: (context) => LandingPage()),
                     (Route<dynamic> route) => false,
               );
             },

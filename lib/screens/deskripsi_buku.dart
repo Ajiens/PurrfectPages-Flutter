@@ -90,7 +90,11 @@ class _DeskripsiBukuState extends State<DeskripsiBuku> {
   TextEditingController lamaPeminjamanController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Deskripsi Buku')),
+      appBar: AppBar(
+        title: Text('Deskripsi Buku'),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
+      ),
       body: FutureBuilder<Book>(
         future: fetchDataBuku(),
         builder: (context, snapshot) {

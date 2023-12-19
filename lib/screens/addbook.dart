@@ -33,6 +33,8 @@ class _AddBookPageState extends State<AddBookPage> {
         title: Text('Form Add Book'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+
       ),
       
       body: Form(
