@@ -1,4 +1,5 @@
-*Purrfect Pages*
+<h5>Purrfect Pages</h5>
+
 
 ### **Anggota Kelompok E04**: 
 [Arini Widya Pramesti](https://github.com/widyaprms) - 2206830271<br>
@@ -6,6 +7,10 @@
 [Nazwa Arifah Ikhsan](https://github.com/nazwaikhsan) - 2206082625<br>
 [Mahira Irgiani](https://github.com/mahirairgn) - 2206027375<br>
 [Prasetyo Adi Wijonarko](https://github.com/prasetyoadii) - 2206830246
+<hr>
+
+### **Download our project**
+install.appcenter.ms/orgs/tk-uas-pbp/apps/purrfect-pages/distribution_groups/public
 <hr>
 
 ### **Tautan Link Berita Acara:**
