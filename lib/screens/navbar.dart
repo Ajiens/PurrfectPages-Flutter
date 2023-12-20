@@ -35,7 +35,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wish List'),
         BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Book'),
-        BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Book'), // Change icon to 'add'
+        BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add New Book'), // Change icon to 'add'
         BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined), label: 'Profile'),
       ],
       selectedItemColor: const Color.fromARGB(255, 56, 78, 202), // Change the color of the selected item here

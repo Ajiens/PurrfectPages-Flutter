@@ -13,7 +13,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  int _currentIndex = 2;
+  int _currentIndex = 4;
   String description = "How's your day?"; // Deskripsi awal
 
   @override

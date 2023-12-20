@@ -30,7 +30,7 @@ class _AddBookPageState extends State<AddBookPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Form Add Book'),
+        title: Text('Add New Book'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,

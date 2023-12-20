@@ -112,48 +112,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             horizontal: 25.0,
                             vertical: 10.0,
                           ),
-                          child: DropdownButtonFormField<String>(
-                            value: selectedRole,
-                            decoration: InputDecoration(
-                              hintText: "Pilih Role Anda",
-                              labelText: "Role",
-                              labelStyle: const TextStyle(color: Colors.white),
-                              icon: const Icon(Icons.people),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              hintStyle: const TextStyle(color: Colors.white),
-                            ),
-                            items: ['Pelanggan', 'Karyawan'].map((String role) {
-                              return DropdownMenuItem<String>(
-                                value: role,
-                                child: Text(role),
-                              );
-                            }).toList(),
-                            onChanged: (String? value) {
-                              setState(() {
-                                selectedRole = value!;
-                              });
-                            },
-                            onSaved: (String? value) {
-                              setState(() {
-                                selectedRole = value!;
-                              });
-                            },
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Role harus dipilih';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 10.0,
-                          ),
                           child: TextFormField(
                             obscureText: true,
                             style: const TextStyle(color: Colors.white),
